@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+  php:
+    build: ./docker/php
+    volumes:
+      - ./:/app
+    working_dir: /app
+    user: '1000:1000'
+    ports:
+      - 8000:8000
+    networks:
+      - bridge
+    command: php -S 0.0.0.0:8000 -t /app
+
+  db:
+    image: mysql:5.7
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: employee
+      MYSQL_USER_ROOT: root
+    networks:
+      - bridge
+    ports:
+      - "6033:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    links:
+      - db
+    networks:
+      - bridge
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8081:80
+
+volumes:
+  dbdata:
+
+networks: #Привязка адреса контейнерам 
+  bridge:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 172.10.1.0/24
+         gateway: 172.10.1.1
+         aux_addresses:
+           php: 172.10.1.10
+           db: 172.10.1.20      
+           phpmyadmin: 172.10.1.30
