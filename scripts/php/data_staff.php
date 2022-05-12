@@ -27,8 +27,7 @@
             </tr>
           </thead>";
       echo "<tbody>";
-        foreach($result as $row){
-          echo "<tr onclick=\"document.location = '$qwerty';\">";
+          echo "<tr>";
             echo "<td>" . $row["id"] . "</td>";
             echo "<td>" . $row["surname"] . "</td>";
             echo "<td>" . $row["name"] . "</td>";
@@ -45,7 +44,6 @@
                         <input type='submit' value='Удалить'>
                 </form></td>";
           echo "</tr>";
-        }
       echo "</tbody>";
     echo "</table>";
     } else {
